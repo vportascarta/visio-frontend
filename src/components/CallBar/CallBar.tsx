@@ -61,7 +61,7 @@ export const CallBar: FunctionComponent<CallBarProps> = ({
   return (
     <AppBar position="fixed" color="primary" className={classes.callBar}>
       <Toolbar>
-        <Typography>TEST</Typography>
+        <Typography>Realtime communication with WebRTC</Typography>
         <div className={classes.fabButtons}>
           <Fab color="secondary" aria-label="mic" onClick={micClickHandler}>
             {micEnabled ? <MicIcon /> : <MicOffIcon />}
