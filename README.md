@@ -7,7 +7,7 @@ This is an early prototype and most of the software isn't created yet.
 There will be a backend to control authentication, user profile and signaling, an AWS tool to deploy the app more easily and a Raspberry Pi image to create an visiophone (with OTA update).
 
 Image of prototype 1
-![prototype 1](./github/proto1.png)
+![prototype 1](https://github.com/vportascarta/visio-frontend/raw/master/.github/proto1.png)
 
 ## Available Scripts from Create React App
 
