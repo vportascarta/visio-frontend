@@ -1,0 +1,58 @@
+import { FunctionComponent, useEffect, useRef, useState } from "react";
+
+interface VideoStreamElementProps {
+  stream?: MediaStream;
+  muteOnStart?: boolean;
+}
+
+export const VideoStreamElement: FunctionComponent<VideoStreamElementProps> = ({
+  stream,
+  muteOnStart,
+}) => {
+  const videoEl = useRef<HTMLVideoElement>(null);
+  const [streamVideoIsOK, setVideoStreamIsOK] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (stream !== undefined && videoEl.current !== null) {
+      videoEl.current.srcObject = stream;
+    }
+  }, [videoEl, stream]);
+
+  const loadedDataHandler = () => {
+    const isVideoOK =
+      stream?.getTracks().some((track) => track.kind === "video") ?? false;
+    setVideoStreamIsOK(isVideoOK);
+  };
+
+  return (
+    <>
+      {!streamVideoIsOK && (
+        <img
+          style={{
+            borderRadius: "inherit",
+            objectFit: "cover",
+            width: "100%",
+            height: "100%",
+          }}
+          src="https://via.placeholder.com/640x480?text=No+video"
+          alt="No video feed"
+        />
+      )}
+      {stream !== undefined && (
+        <video
+          style={{
+            borderRadius: "inherit",
+            objectFit: "cover",
+            width: "100%",
+            height: "100%",
+          }}
+          ref={videoEl}
+          autoPlay
+          playsInline
+          onLoadedData={loadedDataHandler}
+          muted={muteOnStart}
+        />
+      )}
+    </>
+  );
+};

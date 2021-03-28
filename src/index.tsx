@@ -2,7 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import adapter from 'webrtc-adapter';
 import reportWebVitals from './reportWebVitals';
+
+console.log(adapter.browserDetails)
 
 ReactDOM.render(
   <React.StrictMode>
