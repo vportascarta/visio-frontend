@@ -1,7 +1,29 @@
 import { useState } from "react";
+import { makeStyles, Paper } from "@material-ui/core";
+import { CallBar } from "../components/CallBar/CallBar";
 import { VideoStreamElement } from "../components/VideoStreamElement/VideoStreamElement";
 
+const useStyles = makeStyles({
+  fullscreen: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100vw",
+    height: "100vh",
+    zIndex: -2,
+  },
+  topRightPopup: {
+    position: "fixed",
+    top: 20,
+    right: 20,
+    width: "160px",
+    height: "90px",
+    zIndex: -1,
+  }
+});
+
 export const CallPage = () => {
+  const classes = useStyles();
   const [started, setStarted] = useState<boolean>(false);
   const [audio, setAudio] = useState<boolean>(false);
   const [video, setVideo] = useState<boolean>(true);
@@ -10,6 +32,7 @@ export const CallPage = () => {
 
   const getWebcamStream = () => {
     const mediaStreamConstraints = {
+      fake: true,
       video: video
         ? {
             frameRate: 30,
@@ -62,63 +85,23 @@ export const CallPage = () => {
 
   return (
     <div className="App">
-      <h1>Realtime communication with WebRTC</h1>
-      <div>
-        <button id="debugButton" onClick={debugHandler}>
-          Debug
-        </button>
-        <button id="startButton" onClick={startHandler}>
-          Start
-        </button>
-        <button id="stopButton" onClick={stopHandler}>
-          Stop
-        </button>
-        <label>
-          Activer la vidéo :
-          <input
-            type="checkbox"
-            checked={video}
-            name="video"
-            onChange={() => setVideo(!video)}
-          />
-        </label>
-        <label>
-          Activer l'audio :
-          <input
-            type="checkbox"
-            checked={audio}
-            name="audio"
-            onChange={() => setAudio(!audio)}
-          />
-        </label>
-      </div>
+      <CallBar
+        callStarted={started}
+        callClickHandler={() => (started ? stopHandler() : startHandler())}
+        infoClickHandler={() => debugHandler()}
+        micEnabled={audio}
+        micClickHandler={() => setAudio(!audio)}
+        vidClickHandler={() => setVideo(!video)}
+        vidEnabled={video}
+      />
       {started && (
         <>
-          <div
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              width: "100vw",
-              height: "100vh",
-              zIndex: -2,
-            }}
-          >
+          <div className={classes.fullscreen}>
             <VideoStreamElement stream={remoteStream} />
           </div>
-          <div
-            style={{
-              position: "fixed",
-              bottom: 20,
-              right: 20,
-              width: "100px",
-              height: "100px",
-              zIndex: -1,
-              borderRadius: 5,
-            }}
-          >
+          <Paper className={classes.topRightPopup} elevation={12}>
             <VideoStreamElement stream={userStream} muteOnStart />
-          </div>
+          </Paper>
         </>
       )}
     </div>
